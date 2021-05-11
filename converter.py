@@ -39,7 +39,7 @@ def main(input_filename):
     # Open the file and get the information
     conversion_data = open_file(input_filename)
 
-    # Make sure the configutation file version is accpetable
+    # Make sure the configuration file version is accpetable
     check_version(conversion_data["version"])
 
     print (conversion_data)

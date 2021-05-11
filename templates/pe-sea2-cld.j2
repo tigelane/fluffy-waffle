@@ -1,0 +1,59 @@
+version {{ conversion_data.version }}
+ticket_number {{ conversion_data.meta_data.ticket_number }}
+
+ip vrf {{ conversion_data.configuration_data.vrf_1 }}
+rd {{ conversion_data.configuration_data.vrfrd }}
+route-target export {{ conversion_data.configuration_data.rt }}
+route-target import {{ conversion_data.configuration_data.rt }}
+
+
+interface PortChannel1
+description {{ conversion_data.configuration_data.vlan1 }} vrf to {{ conversion_data.configuration_data.vrf_1 }} vrf
+encapsulation dot1Q {{ conversion_data.configuration_data.vlan1 }}
+ip vrf forwarding {{ conversion_data.configuration_data.vrf_1 }}
+ no shutdown
+ip address {{ conversion_data.configuration_data.cldip1 }}
+ no ip redirects
+ no ip unreachables
+
+
+interface TenGigabitEthernet0/0/2.{{ conversion_data.configuration_data.vlan2 }}
+description {{ conversion_data.configuration_data.vlan1 }} vrf to {{ conversion_data.configuration_data.vrf_1 }} vrf
+encapsulation dot1Q {{ conversion_data.configuration_data.vlan2 }}
+ip vrf forwarding {{ conversion_data.configuration_data.vrf_1 }}
+ no shutdown
+ip address {{ conversion_data.configuration_data.cldip1 }}
+ no ip redirects
+ no ip unreachables
+
+
+router bgp 65253
+address-family ipv4 vrf {{ conversion_data.configuration_data.vrf_1 }}
+  redistribute connected
+  redistribute static
+neighbor {{ conversion_data.configuration_data.vrf_1 }}-CLD-VDOM peer-group
+neighbor {{ conversion_data.configuration_data.vrf_1 }}-CLD-VDOM remote-as 100
+neighbor {{ conversion_data.configuration_data.vrf_1 }}-CLD-VDOM send-community both
+neighbor {{ conversion_data.configuration_data.vrf_1 }}-CLD-VDOM soft-reconfiguration inbound
+
+
+neighbor {{ conversion_data.configuration_data.sdcip1 }} peer-group {{ conversion_data.configuration_data.vrf_1 }}-CLD-VDOM
+neighbor {{ conversion_data.configuration_data.sdcip1 }} shutdown
+neighbor {{ conversion_data.configuration_data.sdcip1 }} description Peering to 7K1.DATA 123 VRF
+neighbor {{ conversion_data.configuration_data.sdcip1 }} route-map SET-LOCAL-PREF-200 in
+neighbor {{ conversion_data.configuration_data.sdcip1 }} activate
+neighbor {{ conversion_data.configuration_data.sdcip2 }} peer-group {{ conversion_data.configuration_data.vrf_1 }}-CLD-VDOM
+neighbor {{ conversion_data.configuration_data.sdcip2 }} shutdown
+neighbor {{ conversion_data.configuration_data.sdcip2 }} description Peering to 7K2.DATA 123 VRF
+neighbor {{ conversion_data.configuration_data.sdcip2 }} route-map SET-LOCAL-PREF-150 in
+neighbor {{ conversion_data.configuration_data.sdcip2 }} activate
+neighbor  peer-group {{ conversion_data.configuration_data.vrf_1 }}-CLD-VDOM
+neighbor  shutdown
+neighbor  description Peering to 7K21.DATA {{ conversion_data.configuration_data.vrf_1 }} VRF
+neighbor  route-map SET-LOCAL-PREF-140 in
+neighbor  activate
+neighbor  peer-group {{ conversion_data.configuration_data.vrf_1 }}-CLD-VDOM
+neighbor  shutdown
+neighbor  description Peering to 7K22.DATA {{ conversion_data.configuration_data.vrf_1 }} VRF
+neighbor  route-map SET-LOCAL-PREF-130 in
+neighbor  activate

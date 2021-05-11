@@ -7,5 +7,23 @@ configuration_data:
   # azure / aws
   cloud_provider: azure
   peering_type: vpn
-  connection_type: 2930
-  interface_description: "This will be created"
+  connection_type: com
+  vlan1: 101
+  vlan1name: azurevlan1
+  vlan2: 102
+  vlan2name: azurevlan2
+  vrf_1: dor
+  vrfrd: 1550
+  rt: 1550
+  sdcip1: 172.16.1.3
+  sdcip2: 172.16.1.4
+  cldip1: 172.16.1.5
+  fusionip1: 172.16.1.1
+  fusionip2: 172.16.1.2
+  qdcip1: 172.16.100.3
+  qdcip2: 172.16.100.4
+  cldippe2: 172.16.100.5
+  qdcfusionip1: 172.16.100.1
+  qdcfusionip2: 172.16.100.2
+  mask: 255.255.255.248
+  tun1000d: 172.16.200.1

@@ -1,0 +1,8 @@
+version {{ conversion_data.version }}
+ticket_number {{ conversion_data.meta_data.ticket_number }}
+
+router bgp 100
+  vrf {{ conversion_data.configuration_data.vrf_1 }}
+   neighbor {{ conversion_data.configuration_data.qdcfusionip1 }} remote-as 65100
+    address-family ipv4 unicast
+     route-map CLOUD-SGN2 out

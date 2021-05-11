@@ -2,6 +2,10 @@
 
 import sys
 import yaml
+from jinja2 import Environment, FileSystemLoader, Template
+from os import listdir
+from os.path import isfile, join
+template_files = [f for f in listdir("./templates") if isfile(join("./templates", f))]
 
 SUPPORTED_VERSIONS = [.1, .2]
 
@@ -43,6 +47,16 @@ def main(input_filename):
     check_version(conversion_data["version"])
 
     print (conversion_data)
+    
+    templateLoader = FileSystemLoader(searchpath="./templates")
+    templateEnv = Environment(loader=templateLoader)
+    for template_name in template_files:
+        template = templateEnv.get_template(template_name)
+        outputText = template.render(conversion_data=conversion_data)
+        print(outputText)
+        result = open("configs/" + str(conversion_data["meta_data"]["ticket_number"]) + "-" + template_name + ".config", "w")
+        result.write(outputText)
+        result.close()
 
 if __name__ == "__main__":
     # Check our input to look for 1 argument

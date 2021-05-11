@@ -1,0 +1,14 @@
+version {{ conversion_data.version }}
+ticket_number {{ conversion_data.meta_data.ticket_number }}
+
+vlan {{ conversion_data.configuration_data.vlan1 }}
+ mode fabricpath
+ name {{ conversion_data.configuration_data.vlan1name }}
+
+
+interface port-channel14
+switchport trunk allowed vlan add {{ conversion_data.configuration_data.vlan1 }}
+
+
+interface Ethernet1/11
+switchport trunk allowed vlan add {{ conversion_data.configuration_data.vlan1 }}
